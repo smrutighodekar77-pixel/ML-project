@@ -1,6 +1,7 @@
 import sys
 
-from src.logger import logging
+from src.pipeline.logger import logging
+
 
 
 
