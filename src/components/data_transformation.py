@@ -51,7 +51,11 @@ class DataTranformation:
         except Exception as e:
             raise CustomException(e, sys)
 
-    def initiate_data_transformation(self, train_path, test_path):
+    def initiate_data_transformation(self, train_path, test_path, return_preprocessor_path=False):
+        """
+        Reads train and test CSVs, applies preprocessing, and returns transformed arrays.
+        Set return_preprocessor_path=True to also get the saved preprocessor path.
+        """
         try:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
@@ -61,8 +65,6 @@ class DataTranformation:
             preprocessing_obj = self.get_data_transformer_object()
 
             target_column_name = "math_score"  # Fixed
-            numerical_columns = ["writing_score", "reading_score"]
-
             input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
             target_feature_train_df = train_df[target_column_name]
 
@@ -84,7 +86,10 @@ class DataTranformation:
 
             logging.info("Saved preprocessing object successfully")
 
-            return train_arr, test_arr, self.data_transformation_config.preprocessor_obj_file_path
+            if return_preprocessor_path:
+                return train_arr, test_arr, self.data_transformation_config.preprocessor_obj_file_path
+            else:
+                return train_arr, test_arr
 
         except Exception as e:
             raise CustomException(e, sys)
