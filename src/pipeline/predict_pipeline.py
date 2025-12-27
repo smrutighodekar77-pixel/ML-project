@@ -11,17 +11,22 @@ class PredictPipeline:
 
     def predict(self, features):
         try:
-            # Project root directory
-            BASE_DIR = os.path.abspath(
-                os.path.join(os.path.dirname(__file__), "../../..")
-            )
+            # Current file directory
+            current_dir = os.path.dirname(__file__)
 
-            model_path = os.path.join(BASE_DIR, "artifacts", "model.pkl")
-            preprocessor_path = os.path.join(BASE_DIR, "artifacts", "preprocessor.pkl")
+            # Path to artifacts folder relative to this file
+            model_path = os.path.join(current_dir, "../../artifacts/model.pkl")
+            preprocessor_path = os.path.join(current_dir, "../../artifacts/preprocessor.pkl")
 
+            # Convert to absolute paths
+            model_path = os.path.abspath(model_path)
+            preprocessor_path = os.path.abspath(preprocessor_path)
+
+            # Load objects
             model = load_object(file_path=model_path)
             preprocessor = load_object(file_path=preprocessor_path)
 
+            # Transform and predict
             data_scaled = preprocessor.transform(features)
             preds = model.predict(data_scaled)
 
