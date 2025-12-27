@@ -3,16 +3,16 @@ import pandas as pd
 
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
 
+# Flask app
 application = Flask(__name__)
-app = application
+app = application   
 
-
-# Route for home page
+# Home page
 @app.route('/')
 def index():
     return render_template('index.html')
 
-
+# Prediction route
 @app.route('/predictdata', methods=['GET', 'POST'])
 def predict_datapoint():
     if request.method == 'GET':
@@ -29,16 +29,12 @@ def predict_datapoint():
         )
 
         pred_df = data.get_data_as_data_frame()
-        print(pred_df)
-        print("Before Prediction")
 
         predict_pipeline = PredictPipeline()
-        print("Mid Prediction")
         results = predict_pipeline.predict(pred_df)
-        print("After Prediction")
 
         return render_template('home.html', results=results[0])
 
-
+# Local run (Docker/Gunicorn will ignore this)
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=5000)

@@ -11,18 +11,20 @@ class PredictPipeline:
 
     def predict(self, features):
         try:
-            model_path = os.path.join(os.getcwd(), "artifact", "model.pkl")
-            preprocessor_path = os.path.join(os.getcwd(), "artifact", "preprocessor.pkl")
+            # Project root directory
+            BASE_DIR = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), "../../..")
+            )
 
+            model_path = os.path.join(BASE_DIR, "artifacts", "model.pkl")
+            preprocessor_path = os.path.join(BASE_DIR, "artifacts", "preprocessor.pkl")
 
-
-            print("Before Loading")
             model = load_object(file_path=model_path)
             preprocessor = load_object(file_path=preprocessor_path)
-            print("After Loading")
 
             data_scaled = preprocessor.transform(features)
             preds = model.predict(data_scaled)
+
             return preds
 
         except Exception as e:
