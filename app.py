@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 import pandas as pd
+import os
 
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
 
@@ -9,6 +10,7 @@ app = application
 
 @app.route('/')
 def index():
+    # Redirect users to /predictdata directly
     return render_template('index.html')
 
 
@@ -17,6 +19,7 @@ def predict_datapoint():
     if request.method == 'GET':
         return render_template('home.html')
     else:
+        # Collect form data
         data = CustomData(
             gender=request.form.get('gender'),
             race_ethnicity=request.form.get('ethnicity'),
@@ -27,13 +30,17 @@ def predict_datapoint():
             writing_score=float(request.form.get('writing_score'))
         )
 
+        # Convert to DataFrame
         pred_df = data.get_data_as_data_frame()
 
+        # Predict
         predict_pipeline = PredictPipeline()
         results = predict_pipeline.predict(pred_df)
 
         return render_template('home.html', results=results[0])
 
-if __name__ == "__main__":
-    
 
+if __name__ == "__main__":
+    # Use Railway's PORT environment variable or default to 5000 locally
+    PORT = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=PORT)
