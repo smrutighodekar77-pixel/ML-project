@@ -86,7 +86,7 @@ ML-project/
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/ML-project.git
+git clone https://github.com/smrutighodekar77-pixel/ML-project.git
 ```
 
 Move to the project directory:
